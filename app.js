@@ -21,6 +21,16 @@ app.use(express.static(path.join(__dirname, "public")));
 
 app.use("/", indexRouter);
 app.use("/users", usersRouter);
+//urlを取得
+app.use("/user/:name?", (req, res) => {
+  req.params.name
+    ? res.send("hello, " + req.params.name)
+    : res.send("hello, nobody !!");
+});
+//パラメータに正規表現使う
+app.use("/items/:id([0-9]+)", (req, res) => {
+  res.send("your id is " + req.params.id);
+});
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
