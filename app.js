@@ -32,6 +32,15 @@ app.use("/items/:id([0-9]+)", (req, res) => {
   res.send("your id is " + req.params.id);
 });
 
+//内部ファイル読み込み
+app.use("/sample.txt", (req, res) => {
+  //__dirnameで今のディレクトリが取れる
+  res.sendfile(__dirname + "public/sample.txt");
+});
+//毎回ファイル読み込むのroutingするのだるい.固定化する
+app.use(express.static(__dirname + "public"));
+
+//------------------------------------------------------------------------------
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));
