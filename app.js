@@ -14,6 +14,7 @@ app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "jade");
 //logをcliに表示するmiddleware
 app.use(logger("dev"));
+//
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
@@ -31,6 +32,13 @@ app.use((req, res, next) => {
 // middleware
 app.use("/", indexRouter);
 app.use("/users", usersRouter);
+
+// reactからのrequestを表示するだけ
+app.post("/create", (req, res) => {
+  res.send(req.body.name);
+  //ほんとやったらここでDBに向けてdataを送信したりする
+});
+
 //urlを取得
 app.use("/user/:name?", (req, res) => {
   req.params.name
