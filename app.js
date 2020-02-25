@@ -70,11 +70,11 @@ app.get("/nameTest/:id", (req, res) => {
 // });
 
 //内部ファイル読み込み
-app.use("/sample.txt", (req, res) => {
-  //__dirnameで今のディレクトリが取れる
-  // res.sendfile(__dirname + "public/sample.txt");
-  res.send("先にこっちが映る");
-});
+// app.use("/sample.txt", (req, res) => {
+// __dirnameで今のディレクトリが取れる
+// // res.sendfile(__dirname + "public/sample.txt");
+//   res.send("先にこっちが映る");
+// });
 
 //------------------------------------------------------------------------------
 // catch 404 and forward to error handler
