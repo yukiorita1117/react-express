@@ -1,5 +1,5 @@
 var createError = require("http-errors");
-var express = require("express");
+const express = require("express");
 var path = require("path");
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
@@ -12,16 +12,14 @@ var app = express();
 // view engine setup
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "jade");
+
 //logをcliに表示するmiddleware
 app.use(logger("dev"));
-//
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 //毎回ファイル読み込むのroutingするのだるい.固定化する
-app.use(express.static(path.join(__dirname, "public")));
-// app.use(express.static(__dirname + "public")); //上と同じ
-
+app.use(express.static(path.join(__dirname, "public"))); // app.use(express.static(__dirname + "public")); //上と同じ
 //自作middleware(上記全てのmiddlewareが当てはまらないものはここに入る)
 app.use((req, res, next) => {
   console.log("自作したmiddlewareを表示しています。");
@@ -29,8 +27,11 @@ app.use((req, res, next) => {
   next();
 });
 
-// middleware
-app.use("/", indexRouter);
+app.get("/", (req, res) => {
+  res.send("Hello!!!!!!");
+});
+
+app.use("/indec", indexRouter);
 app.use("/users", usersRouter);
 
 // reactからのrequestを表示するだけ
