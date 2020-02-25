@@ -13,7 +13,7 @@ var app = express();
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "jade");
 
-//logをcliに表示するmiddleware
+//logをcliに表示するmiddleware(middlewareを使うには、app.useを使う)
 app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -27,8 +27,17 @@ app.use((req, res, next) => {
   next();
 });
 
+//__dirnameとはこのファイルのroot===REACT-EXPRESSになる。
+app.use(express.static(__dirname + "/public/help.html"));
+
 app.get("/", (req, res) => {
-  res.send("Hello!!!!!!");
+  res.send("<h1>HTMLも送れるよ。</h1>");
+});
+app.get("/about", (req, res) => {
+  res.send({
+    name: "JSON送るよ",
+    yukio: "幸夫って話"
+  });
 });
 
 app.use("/indec", indexRouter);
