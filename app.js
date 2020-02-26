@@ -3,6 +3,7 @@ const express = require("express");
 var path = require("path");
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
+const hbs = require("hbs");
 
 var indexRouter = require("./routes/index");
 var usersRouter = require("./routes/users");
@@ -11,7 +12,7 @@ var app = express();
 
 // view engine setup
 app.set("views", path.join(__dirname, "views"));
-app.set("view engine", "jade");
+// app.set("view engine", "jade");
 
 //logをcliに表示するmiddleware(middlewareを使うには、app.useを使う)
 app.use(logger("dev"));
@@ -32,12 +33,6 @@ app.use(express.static(__dirname + "/public/help.html"));
 
 app.get("/", (req, res) => {
   res.send("<h1>HTMLも送れるよ。</h1>");
-});
-app.get("/about", (req, res) => {
-  res.send({
-    name: "JSON送るよ",
-    yukio: "幸夫って話"
-  });
 });
 
 app.use("/indec", indexRouter);
@@ -72,6 +67,14 @@ app.get("/items/:id", (req, res) => {
 //別routingでもparams共通化
 app.get("/nameTest/:id", (req, res) => {
   res.send("僕の名前は " + req.params.name);
+});
+
+//handlebars を使うために定義 順番的にproxyで送受信してるcreateの前だとエラーになる(proxyが参照できないらしい)
+app.set("view engine", "hbs");
+
+app.get("/about", (req, res) => {
+  //view内にあるものは直接参照できる
+  res.render("about.hbs");
 });
 
 //パラメータに正規表現使う
