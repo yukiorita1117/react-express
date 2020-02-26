@@ -74,7 +74,11 @@ app.set("view engine", "hbs");
 
 app.get("/about", (req, res) => {
   //view内にあるものは直接参照できる
-  res.render("about.hbs");
+  res.render("about.hbs", {
+    pageTitle: "About Page",
+    content: "コンテンツです。",
+    currentYear: new Date().getFullYear()
+  });
 });
 
 //パラメータに正規表現使う
