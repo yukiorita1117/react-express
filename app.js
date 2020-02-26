@@ -4,6 +4,7 @@ var path = require("path");
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
 const hbs = require("hbs");
+const fs = require("fs");
 
 var indexRouter = require("./routes/index");
 var usersRouter = require("./routes/users");
@@ -38,6 +39,20 @@ app.get("/", (req, res) => {
 app.use("/indec", indexRouter);
 app.use("/users", usersRouter);
 
+// test middleware
+app.use((req, res, next) => {
+  let now = new Date();
+  let log = `${now}${req.method}${req.originalUrl}`;
+  console.log("ログだよ！" + log);
+  //fsのappendFileを使ってログファイルを作成する。
+  fs.appendFile("server.log", log + "/n", err => {
+    if (err) {
+      console.log("errorですって話！");
+    }
+  });
+  next();
+});
+
 // reactからのrequestを表示するだけ
 app.post("/create", (req, res) => {
   res.send(req.body.name);
@@ -59,8 +74,10 @@ app.param("id", (req, res, next, id) => {
 });
 app.get("/items/:id", (req, res) => {
   //配列にないものが来ると"undefind"が返る。
-  res.send(`リクエストのメソッドは${req.method} リクエストのURLは${req.url}`);
-  res.send("this account user name is " + req.params.name);
+  res.send(
+    `リクエストのメソッドは${req.method} リクエストのURLは${req.url} 
+    で this account user name is  + ${req.params.name}`
+  );
 });
 
 //別routingでもparams共通化
