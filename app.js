@@ -22,12 +22,13 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 //毎回ファイル読み込むのroutingするのだるい.固定化する
 app.use(express.static(path.join(__dirname, "public"))); // app.use(express.static(__dirname + "public")); //上と同じ
-//自作middleware(上記全てのmiddlewareが当てはまらないものはここに入る)
-app.use((req, res, next) => {
-  console.log("自作したmiddlewareを表示しています。");
-  //次のmiddleware命令に行きなさいと言う意味
-  next();
-});
+
+// //自作middleware(上記全てのmiddlewareが当てはまらないものはここに入る)
+// app.use((req, res, next) => {
+//   console.log("自作したmiddlewareを表示しています。");
+//   //次のmiddleware命令に行きなさいと言う意味
+//   next();
+// });
 
 //__dirnameとはこのファイルのroot===REACT-EXPRESSになる。
 app.use(express.static(__dirname + "/public/help.html"));
@@ -36,11 +37,11 @@ app.get("/", (req, res) => {
   res.send("<h1>HTMLも送れるよ。</h1>");
 });
 
-app.use("/indec", indexRouter);
+app.use("/index", indexRouter);
 app.use("/users", usersRouter);
 
 // test middleware
-app.use((req, res, next) => {
+app.use("/createLog", (req, res, next) => {
   let now = new Date();
   let log = `${now}${req.method}${req.originalUrl}`;
   console.log("ログだよ！" + log);
