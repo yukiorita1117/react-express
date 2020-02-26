@@ -55,12 +55,11 @@ app.use("/user/:name?", (req, res) => {
 app.param("id", (req, res, next, id) => {
   var users = ["ゆきお", "のぶお", "みつお"];
   req.params.name = users[id];
-
   next();
 });
-
 app.get("/items/:id", (req, res) => {
   //配列にないものが来ると"undefind"が返る。
+  res.send(`リクエストのメソッドは${req.method} リクエストのURLは${req.url}`);
   res.send("this account user name is " + req.params.name);
 });
 
