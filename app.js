@@ -13,7 +13,6 @@ var app = express();
 
 // view engine setup
 app.set("views", path.join(__dirname, "views"));
-// app.set("view engine", "jade");
 
 //logをcliに表示するmiddleware(middlewareを使うには、app.useを使う)
 app.use(logger("dev"));
