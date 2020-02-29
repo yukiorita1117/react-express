@@ -22,7 +22,7 @@ app.use(cookieParser());
 //毎回ファイル読み込むのroutingするのだるい.固定化する
 app.use(express.static(path.join(__dirname, "public"))); // app.use(express.static(__dirname + "public")); //上と同じ
 
-// //自作middleware(上記全てのmiddlewareが当てはまらないものはここに入る)
+// 自作middleware(上記全てのmiddlewareが当てはまらないものはここに入る)
 // app.use((req, res, next) => {
 //   console.log("自作したmiddlewareを表示しています。");
 //   //次のmiddleware命令に行きなさいと言う意味
@@ -34,6 +34,7 @@ app.use(express.static(__dirname + "/public/help.html"));
 
 app.get("/", (req, res) => {
   res.send("<h1>HTMLも送れるよ。</h1>");
+  next();
 });
 
 app.use("/index", indexRouter);
@@ -88,13 +89,18 @@ app.get("/nameTest/:id", (req, res) => {
 //handlebars を使うために定義 順番的にproxyで送受信してるcreateの前だとエラーになる(proxyが参照できないらしい)
 app.set("view engine", "hbs");
 
-app.get("/about", (req, res) => {
+app.get("/about", (req, res, next) => {
   //view内にあるものは直接参照できる
   res.render("about.hbs", {
     pageTitle: "About Page",
     content: "コンテンツです。",
     currentYear: new Date().getFullYear()
   });
+  next();
+});
+//メンテナンスページは重要度高いのでrouting的に上に設置する。
+app.use((req, res, next) => {
+  res.render("maintenance.hbs");
 });
 
 //パラメータに正規表現使う
