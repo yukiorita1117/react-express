@@ -5,7 +5,10 @@ var request = require("request");
 const token = "OKzuZ6PnHjHjY2UFvQ6ZDGgpjL5d";
 const globalStock = [];
 
+//`{"sentence":"${req.body.name}"}`
+
 router.post("/", (req, res) => {
+  console.log(req.body.name);
   const headers = {
     "Content-Type": "application/json;charset=UTF-8",
     Authorization: `Bearer ${token}`
@@ -21,7 +24,10 @@ router.post("/", (req, res) => {
   function callback(error, response, body) {
     if (!error && response.statusCode == 200) {
       console.log("コンソールログ", body);
-      res.send(body);
+      //   res.send(body);
+      const obj = JSON.parse(body);
+      res.send(obj.result.emotional_phrase[0].emotion);
+
       globalStock.push(body);
       console.log("中身何？？？", globalStock);
     }
@@ -31,24 +37,21 @@ router.post("/", (req, res) => {
 
 router.get("/", (req, res) => {
   const obj = JSON.parse(globalStock[0]);
-  console.log(obj.result.emotional_phrase[0].emotion);
 
   res.json([
     {
       id: 1,
-      text: "Cotohaって話"
+      text: "「青春を謳歌した。」"
     },
     {
       id: 2,
-      text: "うまくいってる？？？"
+      text: "上記のフレーズを感情分析する。"
     },
     {
       id: 3,
-      text: obj.result.emotional_phrase[0].emotion
+      text: `「${obj.result.emotional_phrase[0].emotion}」`
     }
   ]);
-  //   res.send(req.body.name);
-  //   res.send("respond with a resource");
 });
 
 module.exports = router;
