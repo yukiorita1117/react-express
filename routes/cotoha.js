@@ -13,7 +13,7 @@ router.post("/", (req, res) => {
     "Content-Type": "application/json;charset=UTF-8",
     Authorization: `Bearer ${token}`
   };
-  const dataString = '{"sentence":"青春を謳歌した。"}';
+  const dataString = `{"sentence":"${req.body.name}"}`;
   const options = {
     url: "https://api.ce-cotoha.com/api/dev/nlp/v1/sentiment",
     method: "POST",
@@ -37,21 +37,21 @@ router.post("/", (req, res) => {
 
 router.get("/", (req, res) => {
   const obj = JSON.parse(globalStock[0]);
-
-  res.json([
-    {
-      id: 1,
-      text: "「青春を謳歌した。」"
-    },
-    {
-      id: 2,
-      text: "上記のフレーズを感情分析する。"
-    },
-    {
-      id: 3,
-      text: `「${obj.result.emotional_phrase[0].emotion}」`
-    }
-  ]);
+  res.send(obj.result.emotional_phrase[0].emotion);
+  //   res.json([
+  //     {
+  //       id: 1,
+  //       text: "「青春を謳歌した。」"
+  //     },
+  //     {
+  //       id: 2,
+  //       text: "上記のフレーズを感情分析する。"
+  //     },
+  //     {
+  //       id: 3,
+  //       text: `「${obj.result.emotional_phrase[0].emotion}」`
+  //     }
+  //   ]);
 });
 
 module.exports = router;
