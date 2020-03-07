@@ -8,6 +8,7 @@ const fs = require("fs");
 
 var indexRouter = require("./routes/index");
 var usersRouter = require("./routes/users");
+const cotohaRouter = require("./routes/cotoha");
 
 var app = express();
 
@@ -41,18 +42,21 @@ app.use("/index", indexRouter);
 app.use("/users", usersRouter);
 
 // test middleware
-app.use("/createLog", (req, res, next) => {
-  let now = new Date();
-  let log = `${now}${req.method}${req.originalUrl}`;
-  console.log("ログだよ！" + log);
-  //fsのappendFileを使ってログファイルを作成する。
-  fs.appendFile("server.log", log + "/n", err => {
-    if (err) {
-      console.log("errorですって話！");
-    }
-  });
-  next();
-});
+// app.use("/createLog", (req, res, next) => {
+//   let now = new Date();
+//   let log = `${now}${req.method}${req.originalUrl}`;
+//   console.log("ログだよ！" + log);
+//   //fsのappendFileを使ってログファイルを作成する。
+//   fs.appendFile("server.log", log + "/n", err => {
+//     if (err) {
+//       console.log("errorですって話！");
+//     }
+//   });
+//   next();
+// });
+
+// cotoha
+app.use("/cotoha", cotohaRouter);
 
 // reactからのrequestを表示するだけ
 app.post("/create", (req, res) => {
