@@ -3,6 +3,7 @@ var router = express.Router();
 var request = require("request");
 
 const token = "OKzuZ6PnHjHjY2UFvQ6ZDGgpjL5d";
+const globalStock = [];
 
 router.post("/", (req, res) => {
   const headers = {
@@ -19,17 +20,34 @@ router.post("/", (req, res) => {
 
   function callback(error, response, body) {
     if (!error && response.statusCode == 200) {
-      console.log(body);
+      console.log("コンソールログ", body);
       res.send(body);
+      globalStock.push(body);
+      console.log("中身何？？？", globalStock);
     }
   }
   request(options, callback);
-  res.send(req.body.name);
 });
 
 router.get("/", (req, res) => {
-  res.send(req.body.name);
+  const obj = JSON.parse(globalStock[0]);
+  console.log(obj.result.emotional_phrase[0].emotion);
 
+  res.json([
+    {
+      id: 1,
+      text: "Cotohaって話"
+    },
+    {
+      id: 2,
+      text: "うまくいってる？？？"
+    },
+    {
+      id: 3,
+      text: obj.result.emotional_phrase[0].emotion
+    }
+  ]);
+  //   res.send(req.body.name);
   //   res.send("respond with a resource");
 });
 
