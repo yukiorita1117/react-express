@@ -2,7 +2,7 @@ var express = require("express");
 var router = express.Router();
 var request = require("request");
 
-const token = "OKzuZ6PnHjHjY2UFvQ6ZDGgpjL5d";
+const token = "l7ekQ3zYbtyoivoamVIyGSYY1USG";
 var globalStock = [];
 var globalSentence = "";
 
@@ -28,18 +28,21 @@ router.post("/", (req, res, next) => {
     if (!error && response.statusCode == 200) {
       console.log("コンソールログ", body);
       //   res.send(body);
-      const obj = JSON.parse(body);
+      //   const obj = JSON.parse(body);
       //   res.send(obj.result.emotional_phrase[0].emotion);
       globalSentence = req.body.name;
       globalStock.push(body);
-      console.log("中身何？？？", globalStock);
+      console.log("中身何よ？？？", globalStock);
     }
   }
   request(options, callback);
-  res.render("cotoha.hbs");
+  globalStock.shift();
+  //   res.render("cotoha.hbs");
 });
 
 router.get("/", (req, res) => {
+  console.log("reactから受け取れてる？", req.body.name);
+
   const obj = JSON.parse(globalStock[0]);
   console.log("なんか変更されてない？", globalStock);
   //   res.send(obj.result.emotional_phrase[0].emotion);

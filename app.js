@@ -5,6 +5,7 @@ var cookieParser = require("cookie-parser");
 var logger = require("morgan");
 const hbs = require("hbs");
 const fs = require("fs");
+var request = require("request");
 
 var indexRouter = require("./routes/index");
 var usersRouter = require("./routes/users");
@@ -36,6 +37,68 @@ app.use(express.static(__dirname + "/public/help.html"));
 app.get("/", (req, res) => {
   res.send("<h1>HTMLも送れるよ。</h1>");
   next();
+});
+
+// POSTリクエストに対処
+const token = "l7ekQ3zYbtyoivoamVIyGSYY1USG";
+var globalStock = [];
+var globalSentence = "";
+
+app.post("/api/test", (req, res) => {
+  // クライアントにステータスコード(200:成功)とともにレスポンスを返す
+  res.status(200).send();
+  const { inputText } = req.body;
+  console.log("inputText", inputText);
+
+  if (req.body.name === undefined) {
+    req.body.name = "空だって悲しいね";
+  }
+  const headers = {
+    "Content-Type": "application/json;charset=UTF-8",
+    Authorization: `Bearer ${token}`
+  };
+  const dataString = `{"sentence":"${inputText}"}`;
+  const options = {
+    url: "https://api.ce-cotoha.com/api/dev/nlp/v1/sentiment",
+    method: "POST",
+    headers: headers,
+    body: dataString
+  };
+
+  function callback(error, response, body) {
+    if (!error && response.statusCode == 200) {
+      console.log("コンソールログ", body);
+      //   res.send(obj.result.emotional_phrase[0].emotion);
+      globalSentence = inputText;
+      globalStock.push(body);
+      console.log("globalStockに入ってればOK", globalStock);
+    }
+  }
+  request(options, callback);
+  globalStock.shift();
+});
+
+app.get("/api/test", (req, res) => {
+  const obj = JSON.parse(globalStock[0]);
+  console.log("なんか変更されてない？", obj.result.emotional_phrase[0].emotion);
+  const resultArray = [
+    {
+      id: 1,
+      inputText: `「${globalSentence}」`
+    },
+    {
+      id: 2,
+      inputText: "上記のフレーズを感情分析する。"
+    },
+    {
+      id: 3,
+      inputText: `「${obj.result.emotional_phrase[0].emotion}」`
+    }
+  ];
+  globalStock.shift();
+
+  console.log("どういうことなの？", resultArray);
+  res.status(200).send(resultArray);
 });
 
 app.use("/index", indexRouter);
