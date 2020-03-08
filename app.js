@@ -44,7 +44,7 @@ const token = "l7ekQ3zYbtyoivoamVIyGSYY1USG";
 var globalStock = [];
 var globalSentence = "";
 
-app.post("/api/test", (req, res) => {
+app.post("/api/cotoha", (req, res) => {
   // クライアントにステータスコード(200:成功)とともにレスポンスを返す
   res.status(200).send();
   const { inputText } = req.body;
@@ -78,7 +78,7 @@ app.post("/api/test", (req, res) => {
   globalStock.shift();
 });
 
-app.get("/api/test", (req, res) => {
+app.get("/api/cotoha", (req, res) => {
   const obj = JSON.parse(globalStock[0]);
   console.log("なんか変更されてない？", obj.result.emotional_phrase[0].emotion);
   const resultArray = [
