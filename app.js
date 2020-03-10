@@ -40,7 +40,8 @@ app.get("/", (req, res) => {
 });
 
 // POSTリクエストに対処
-const token = "l7ekQ3zYbtyoivoamVIyGSYY1USG";
+// TODO 都度accessTokenは取得するようにする。
+const token = "azfHk0k39MakNmIlQPl8ArJc70ny";
 var globalStock = [];
 var globalSentence = "";
 
@@ -79,6 +80,7 @@ app.post("/api/cotoha", (req, res) => {
 });
 
 app.get("/api/cotoha", (req, res) => {
+  //try-catchしないと失敗した時もブラウザ側に「解析できない文字列でした」と送信しないとだめだな。
   const obj = JSON.parse(globalStock[0]);
   console.log("なんか変更されてない？", obj.result.emotional_phrase[0].emotion);
   const resultArray = [
@@ -97,7 +99,6 @@ app.get("/api/cotoha", (req, res) => {
   ];
   globalStock.shift();
 
-  console.log("どういうことなの？", resultArray);
   res.status(200).send(resultArray);
 });
 
