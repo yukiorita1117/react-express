@@ -82,7 +82,6 @@ app.post("/api/cotoha", (req, res) => {
 app.get("/api/cotoha", (req, res) => {
   //try-catchしないと失敗した時もブラウザ側に「解析できない文字列でした」と送信しないとだめ。
   const obj = JSON.parse(globalStock[0]);
-  console.log("あああ", obj.result.emotional_phrase.length);
   if (obj.result.emotional_phrase.length > 0) {
     const resultArray = [
       {
